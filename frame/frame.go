@@ -12,7 +12,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 	"github.com/soheilhy/cmux"
 	"google.golang.org/grpc"
 )
