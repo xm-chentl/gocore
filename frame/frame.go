@@ -11,6 +11,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
+	"github.com/kataras/iris"
 	"github.com/soheilhy/cmux"
 	"google.golang.org/grpc"
 )
@@ -18,6 +20,8 @@ import (
 type GinOption func(g *gin.Engine)
 
 type GRPCOption func(g *grpc.Server)
+
+type IrisOption func(g *iris.Application)
 
 type IService interface {
 	RegisterGin(...GinOption)
@@ -28,16 +32,18 @@ type IService interface {
 type service struct {
 	c cmux.CMux
 
-	// 通讯
+	// 通讯 ginSvc grpcSvc 微服务  irisSvc web服务
 	ginSvc  *gin.Engine
 	grpcSvc *grpc.Server
-
+	irisSvc *iris.Application
 	// 监控 jaeger、prometheus
+	//tracing jaegerex.ILinkTracing
 }
 
 func (s *service) RegisterGin(opts ...GinOption) {
 	if len(opts) > 0 {
 		s.ginSvc = gin.Default()
+		s.ginSvc.Use(func(ctx *gin.Context) {})
 		for _, o := range opts {
 			o(s.ginSvc)
 		}
@@ -46,9 +52,25 @@ func (s *service) RegisterGin(opts ...GinOption) {
 
 func (s *service) RegisterGRPC(opts ...GRPCOption) {
 	if len(opts) > 0 {
-		s.grpcSvc = grpc.NewServer()
+		s.grpcSvc = grpc.NewServer(
+			grpc.StreamInterceptor(
+				grpc_prometheus.StreamServerInterceptor,
+			),
+			grpc.UnaryInterceptor(
+				grpc_prometheus.UnaryServerInterceptor,
+			),
+		)
 		for _, o := range opts {
 			o(s.grpcSvc)
+		}
+		grpc_prometheus.Register(s.grpcSvc)
+	}
+}
+
+func (s *service) RegisterIris(opts ...IrisOption) {
+	if len(opts) > 0 {
+		for _, o := range opts {
+			o(s.irisSvc)
 		}
 	}
 }
@@ -77,6 +99,7 @@ func (s *service) Run(port int) {
 		}
 	}()
 
+	fmt.Println("服务已启动, 端口: ", port, "...")
 	c := make(chan os.Signal)
 	signal.Notify(c, syscall.SIGTERM, syscall.SIGINT)
 	<-c
