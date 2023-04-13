@@ -24,7 +24,7 @@ type GRPCOption func(g *grpc.Server)
 type IrisOption func(g *iris.Application)
 
 type IService interface {
-	RegisterGin(...GinOption)
+	RegisterHttp(...GinOption)
 	RegisterGRPC(...GRPCOption)
 	Run(port int)
 }
@@ -40,7 +40,7 @@ type service struct {
 	//tracing jaegerex.ILinkTracing
 }
 
-func (s *service) RegisterGin(opts ...GinOption) {
+func (s *service) RegisterHttp(opts ...GinOption) {
 	if len(opts) > 0 {
 		s.ginSvc = gin.Default()
 		s.ginSvc.Use(func(ctx *gin.Context) {})
@@ -67,6 +67,7 @@ func (s *service) RegisterGRPC(opts ...GRPCOption) {
 	}
 }
 
+// Deprecated: 废弃
 func (s *service) RegisterIris(opts ...IrisOption) {
 	if len(opts) > 0 {
 		for _, o := range opts {
