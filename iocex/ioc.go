@@ -99,7 +99,7 @@ func Inject(structInst interface{}, funcs ...func(reflect.StructField) interface
 				if fieldRv.IsValid() {
 					v = fieldRv.Interface()
 				} else {
-					err = fmt.Errorf("%s结构体使用默认注入, 但未注册(%s)", rt.Name(), field.Type.Name())
+					err = fmt.Errorf("specifies that the %s is not registered(%s)", rt.Name(), field.Type.Name())
 					return
 				}
 			}
@@ -135,13 +135,13 @@ func SetMap(key interface{}, mapping map[string]interface{}) {
 	container.Store(rt, mapping)
 }
 
-func getType(inst interface{}) reflect.Type {
-	rt := reflect.TypeOf(inst)
+func getType(v interface{}) reflect.Type {
+	rt := reflect.TypeOf(v)
 	if rt.Kind() == reflect.Ptr {
 		rt = rt.Elem()
 	}
 	if rt.Kind() != reflect.Interface {
-		panic("inst is not interface")
+		panic("Specifies that the object parameter is not an interface")
 	}
 
 	return rt

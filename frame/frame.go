@@ -105,7 +105,7 @@ func (s *service) Run(port int) {
 	signal.Notify(c, syscall.SIGTERM, syscall.SIGINT)
 	<-c
 
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	<-ctx.Done()
 	s.c.Close()

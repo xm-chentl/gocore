@@ -1,6 +1,8 @@
 package handles
 
-import "context"
+import (
+	"context"
+)
 
 type Handler interface {
 	Call(context.Context) (interface{}, error)
@@ -14,11 +16,13 @@ func (h Handlers) Has(key string) (ok bool) {
 }
 
 var (
-	pool = make(Handlers)
+	pool             = make(Handlers)
+	methodOfHandlers = make(map[string][]Handler)
 )
 
 func Has(route string) bool {
-	return pool.Has(route)
+	_, ok := pool[route]
+	return ok
 }
 
 func Get(route string) Handler {
