@@ -59,6 +59,11 @@ func Inject(structInst interface{}, funcs ...func(reflect.StructField) interface
 			continue
 		}
 
+		tagValue, ok := field.Tag.Lookup(tagInject)
+		if !ok {
+			continue
+		}
+
 		originalRt := field.Type
 		fieldRt := field.Type
 		if fieldRt.Kind() == reflect.Ptr {
@@ -72,10 +77,6 @@ func Inject(structInst interface{}, funcs ...func(reflect.StructField) interface
 			}
 		}
 		if fieldRt.Kind() == reflect.Interface {
-			name, ok := field.Tag.Lookup(tagInject)
-			if !ok {
-				continue
-			}
 
 			v, ok := container.Load(field.Type)
 			if !ok {
@@ -84,14 +85,14 @@ func Inject(structInst interface{}, funcs ...func(reflect.StructField) interface
 
 			vv := reflect.ValueOf(v)
 			if vv.Kind() == reflect.Map {
-				if name == "" {
-					name = TagDefault
+				if tagValue == "" {
+					tagValue = TagDefault
 				}
 
 				var fieldRv reflect.Value
 				mapIter := vv.MapRange()
 				for mapIter.Next() {
-					if strings.EqualFold(mapIter.Key().String(), name) {
+					if strings.EqualFold(mapIter.Key().String(), tagValue) {
 						fieldRv = mapIter.Value()
 						break
 					}
