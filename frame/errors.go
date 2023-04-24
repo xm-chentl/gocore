@@ -3,9 +3,11 @@ package frame
 import "fmt"
 
 var (
-	ErrParameterFailed = NewError(601, "handle parameters is failed")
-	ErrInjectFailed    = NewError(602, "handle inject failed")
-	ErrHandleNotExist  = NewError(604, "handle(route) does not exists")
+	ErrParameterFailed       = NewError(601, "handle parameters is failed")
+	ErrBodyParameterFailed   = NewError(601, "handle body parameters is failed")
+	ErrHeaderParameterFailed = NewError(601, "handle header parameters is failed")
+	ErrInjectFailed          = NewError(602, "handle inject failed")
+	ErrHandleNotExist        = NewError(604, "handle(route) does not exists")
 )
 
 type CustomError struct {

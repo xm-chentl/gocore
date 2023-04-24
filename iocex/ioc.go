@@ -58,6 +58,7 @@ func Inject(structInst interface{}, funcs ...func(reflect.StructField) interface
 		if !field.IsExported() {
 			continue
 		}
+
 		originalRt := field.Type
 		fieldRt := field.Type
 		if fieldRt.Kind() == reflect.Ptr {
