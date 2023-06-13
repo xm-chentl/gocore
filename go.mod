@@ -6,6 +6,7 @@ require (
 	github.com/HdrHistogram/hdrhistogram-go v1.1.2 // indirect
 	github.com/ajg/form v1.5.1 // indirect
 	github.com/gin-gonic/gin v1.8.1
+	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
@@ -18,6 +19,7 @@ require (
 	github.com/moul/http2curl v1.0.0 // indirect
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/prometheus/client_golang v1.13.0 // indirect
+	github.com/redis/go-redis/v9 v9.0.5
 	github.com/sergi/go-diff v1.1.0 // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	github.com/smartystreets/goconvey v1.7.2 // indirect
