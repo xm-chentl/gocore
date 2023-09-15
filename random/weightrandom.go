@@ -1,7 +1,7 @@
 package random
 
 type Item struct {
-	Name   string
+	Value  interface{}
 	Weight int
 }
 
