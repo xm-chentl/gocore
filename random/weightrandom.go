@@ -1,7 +1,5 @@
 package random
 
-import "sort"
-
 type Item struct {
 	Value  interface{}
 	Weight int
@@ -24,7 +22,6 @@ func (s SortArray) Less(i, j int) bool {
 type WeightFunc func(IRandom, ...Item) *Item
 
 func RandWeightFunc(r IRandom, items ...Item) (res *Item) {
-	sort.Sort(SortArray(items))
 	totalWeight := 0
 	for _, item := range items {
 		totalWeight += item.Weight
