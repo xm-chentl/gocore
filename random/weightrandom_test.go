@@ -23,6 +23,10 @@ func (i impl) RandWeight(items ...Item) *Item {
 	return i.WeightFunc(i, items...)
 }
 
+func (i impl) RandString() string {
+	return ""
+}
+
 func (i impl) Desc() string {
 	return i.desc
 }

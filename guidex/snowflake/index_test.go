@@ -14,3 +14,8 @@ func Benchmark_String(b *testing.B) {
 		pool[v] = v
 	}
 }
+
+func Test_String(t *testing.T) {
+	impl := New()
+	t.Fatal(impl.String())
+}
