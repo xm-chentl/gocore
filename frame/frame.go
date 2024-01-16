@@ -12,7 +12,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
-	"github.com/kataras/iris/v12"
 	"github.com/soheilhy/cmux"
 	"google.golang.org/grpc"
 )
@@ -20,8 +19,6 @@ import (
 type GinOption func(g *gin.Engine)
 
 type GRPCOption func(g *grpc.Server)
-
-type IrisOption func(g *iris.Application)
 
 type IService interface {
 	RegisterHttp(...GinOption)
@@ -35,7 +32,6 @@ type service struct {
 	// 通讯 ginSvc grpcSvc 微服务  irisSvc web服务
 	ginSvc  *gin.Engine
 	grpcSvc *grpc.Server
-	irisSvc *iris.Application
 	// 监控 jaeger、prometheus
 	//tracing jaegerex.ILinkTracing
 }
@@ -64,15 +60,6 @@ func (s *service) RegisterGRPC(opts ...GRPCOption) {
 			o(s.grpcSvc)
 		}
 		grpc_prometheus.Register(s.grpcSvc)
-	}
-}
-
-// Deprecated: 废弃
-func (s *service) RegisterIris(opts ...IrisOption) {
-	if len(opts) > 0 {
-		for _, o := range opts {
-			o(s.irisSvc)
-		}
 	}
 }
 

@@ -34,7 +34,7 @@ func init() {
 
 var (
 	// 0 项目名 1`
-	formatQuote = `"%s/internal/api%s"`
+	formatQuote = `"%s/%s%s"`
 	regexAPI    = regexp.MustCompile("[A-Za-z0-9]+API")
 )
 
@@ -57,8 +57,10 @@ type apiInfo struct {
 */
 
 func GenerateAPI(dir string) (err error) {
+	virtualPath := dir
 	apiDir := dir
 	rootDir, _ := os.Getwd()
+	fmt.Println("root > ", rootDir, " | ", apiDir, " | ", virtualPath)
 	if apiDir == "" {
 		apiDir = path.Join(rootDir, "internal", "api")
 	} else {
@@ -97,7 +99,7 @@ func GenerateAPI(dir string) (err error) {
 		}
 
 		apiInfoArray[index].target = strings.ReplaceAll(path.Dir(info.target), apiDir, "")
-		importQuote := fmt.Sprintf(formatQuote, modelName, apiInfoArray[index].target)
+		importQuote := fmt.Sprintf(formatQuote, modelName, virtualPath, apiInfoArray[index].quote)
 		_, ok := packageExistMap[info.quote]
 		if ok {
 			if _, ok = packageMap[importQuote]; !ok {
