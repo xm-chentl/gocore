@@ -99,7 +99,7 @@ func GenerateAPI(dir string) (err error) {
 		}
 
 		apiInfoArray[index].target = strings.ReplaceAll(path.Dir(info.target), apiDir, "")
-		importQuote := fmt.Sprintf(formatQuote, modelName, virtualPath, apiInfoArray[index].quote)
+		importQuote := fmt.Sprintf(formatQuote, modelName, virtualPath, apiInfoArray[index].target)
 		_, ok := packageExistMap[info.quote]
 		if ok {
 			if _, ok = packageMap[importQuote]; !ok {
@@ -122,6 +122,7 @@ func GenerateAPI(dir string) (err error) {
 		)
 		apiInfoArray[index].Register = content
 	}
+	fmt.Println(">>>> ", apiInfoArray[0].target)
 	for _, index := range deleteIndexArray {
 		apiInfoArray = append(apiInfoArray[:index], apiInfoArray[index+1:]...)
 	}
