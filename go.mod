@@ -6,6 +6,7 @@ require (
 	github.com/GiterLab/aliyun-sms-go-sdk v0.0.0-20180108012719-fcc9f11de968
 	github.com/gin-gonic/gin v1.9.1
 	github.com/golang/glog v1.1.2
+	github.com/gorilla/websocket v1.5.1
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/redis/go-redis/v9 v9.3.0
