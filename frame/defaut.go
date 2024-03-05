@@ -11,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"github.com/xm-chentl/gocore/frame/handles"
+	"github.com/xm-chentl/gocore/iocex"
 )
 
 type NumberSegments int
@@ -68,6 +69,10 @@ func NewHandle(method string, num NumberSegments) GinOption {
 				}
 			}
 			if err = ctx.Bind(handleTemp); err != nil {
+				return
+			}
+			if err = iocex.Inject(handleTemp); err != nil {
+				err = ErrInjectFailed
 				return
 			}
 
