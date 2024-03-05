@@ -60,7 +60,10 @@ func GenerateAPI(dir string) (err error) {
 	virtualPath := dir
 	apiDir := dir
 	rootDir, _ := os.Getwd()
-	fmt.Println("root > ", rootDir, " | ", apiDir, " | ", virtualPath)
+	if virtualPath != "" && virtualPath[len(virtualPath)-1:] == "/" {
+		virtualPath = virtualPath[0 : len(virtualPath)-1]
+	}
+	// fmt.Println("root > ", rootDir, " | ", apiDir, " | ", virtualPath)
 	if apiDir == "" {
 		apiDir = path.Join(rootDir, "internal", "api")
 	} else {
@@ -100,6 +103,7 @@ func GenerateAPI(dir string) (err error) {
 
 		apiInfoArray[index].target = strings.ReplaceAll(path.Dir(info.target), apiDir, "")
 		importQuote := fmt.Sprintf(formatQuote, modelName, virtualPath, apiInfoArray[index].target)
+		// fmt.Println(">>>> ", apiInfoArray[index].target)
 		_, ok := packageExistMap[info.quote]
 		if ok {
 			if _, ok = packageMap[importQuote]; !ok {

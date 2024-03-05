@@ -47,12 +47,14 @@ func NewHandle(method string, num NumberSegments) GinOption {
 				if v, ok := err.(*CustomError); ok {
 					resp.Code = v.Code
 					resp.Message = v.Message
+				} else {
+					resp.Code = 500
+					resp.Message = err.Error()
 				}
 				ctx.JSON(http.StatusOK, resp)
 			}()
 
 			route := num.Route(ctx)
-			fmt.Println("route >>> ", route)
 			if !handles.Has(route) {
 				err = ErrHandleNotExist
 				return
