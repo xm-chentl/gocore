@@ -1,14 +1,12 @@
 package frame
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"net"
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
@@ -88,13 +86,13 @@ func (s *service) Run(port int) {
 	}()
 
 	fmt.Println("服务已启动, 端口: ", port, "...")
-	c := make(chan os.Signal)
-	signal.Notify(c, syscall.SIGTERM, syscall.SIGINT)
-	<-c
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	<-sigs
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-	<-ctx.Done()
+	// ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	// defer cancel()
+	// <-ctx.Done()
 	s.c.Close()
 	log.Println("shutdown service")
 }
