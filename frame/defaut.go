@@ -46,13 +46,16 @@ func NewHandle(method string, num NumberSegments) GinOption {
 					// 栈数据
 					err = NewError(500, fmt.Sprintf("%v", errRecover))
 				}
-				if v, ok := err.(*CustomError); ok {
-					resp.Code = v.Code
-					resp.Message = v.Message
-				} else {
-					resp.Code = 500
-					resp.Message = err.Error()
+				if err != nil {
+					if v, ok := err.(*CustomError); ok {
+						resp.Code = v.Code
+						resp.Message = v.Message
+					} else {
+						resp.Code = 500
+						resp.Message = err.Error()
+					}
 				}
+
 				ctx.JSON(http.StatusOK, resp)
 			}()
 
