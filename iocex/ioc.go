@@ -132,7 +132,7 @@ func Set(key interface{}, inst interface{}) {
 	container.Store(rt, inst)
 }
 
-func SetMap(key interface{}, mapping map[string]interface{}) {
+func SetMap(key interface{}, mapping Map) {
 	rt := getType(key)
 	container.Store(rt, mapping)
 }
