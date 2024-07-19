@@ -29,8 +29,13 @@ type APIInst struct {
 }
 
 type apiInst struct {
-	Db  IDb `inject:""`
-	Db2 IDb `inject:"mongo"`
+	Db   IDb   `inject:""`
+	Db2  IDb   `inject:"mongo"`
+	Tool *Tool `inject:""`
+}
+
+type Tool struct {
+	Name string
 }
 
 func Test_Get(t *testing.T) {
@@ -91,18 +96,55 @@ func Test_Has(t *testing.T) {
 	container.Delete(key)
 }
 
+func Test_Injectss(t *testing.T) {
+	key := getType(new(IDb))
+	container.Store(
+		key,
+		&dbInst{},
+	)
+	key1 := getType(new(Tool))
+	container.Store(
+		key1,
+		&Tool{
+			Name: "test_001",
+		},
+	)
+	inst := &apiInst{}
+	if err := Inject(inst); err != nil {
+		t.Fatal("err")
+	}
+	if inst.Db.Db() != "db" {
+		t.Fatal("err")
+	}
+	if inst.Tool == nil {
+		t.Fatal("err")
+	}
+	container.Delete(key)
+}
+
 func Test_Inject(t *testing.T) {
+
 	t.Run(`Tag:inject:""`, func(test *testing.T) {
 		key := getType(new(IDb))
 		container.Store(
 			key,
 			&dbInst{},
 		)
+		key1 := getType(new(Tool))
+		container.Store(
+			key1,
+			&Tool{
+				Name: "test_001",
+			},
+		)
 		inst := &apiInst{}
 		if err := Inject(inst); err != nil {
 			test.Fatal("err")
 		}
 		if inst.Db.Db() != "db" {
+			test.Fatal("err")
+		}
+		if inst.Tool == nil {
 			test.Fatal("err")
 		}
 		container.Delete(key)

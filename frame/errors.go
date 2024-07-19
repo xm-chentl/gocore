@@ -10,6 +10,9 @@ var (
 	ErrInjectFailed          = NewError(605, "handle inject failed")
 	ErrHandleNotExist        = NewError(606, "handle(route) does not exists")
 	ErrInvalidHandle         = NewError(607, "invalid handle")
+	ErrDataCreateFailed      = NewError(608, "create data failed")
+	ErrDataQueryFailed       = NewError(609, "query data failed")
+	ErrDataNotExists         = NewError(610, "data does not exist")
 )
 
 type CustomError struct {
@@ -26,4 +29,18 @@ func NewError(code int, format string, args ...interface{}) error {
 		Code:    code,
 		Message: fmt.Sprintf(format, args...),
 	}
+}
+
+func WithError(err error, format string, args ...interface{}) error {
+	c, ok := err.(*CustomError)
+	if !ok {
+		return NewError(600, format, args...)
+	}
+
+	c.Message = fmt.Sprintf("%s: %s",
+		c.Message,
+		fmt.Sprintf(format, args...),
+	)
+
+	return c
 }

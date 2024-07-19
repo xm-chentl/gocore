@@ -76,8 +76,7 @@ func Inject(structInst interface{}, funcs ...func(reflect.StructField) interface
 				continue
 			}
 		}
-		if fieldRt.Kind() == reflect.Interface {
-
+		if fieldRt.Kind() == reflect.Interface || fieldRt.Kind() == reflect.Struct {
 			v, ok := container.Load(field.Type)
 			if !ok {
 				continue
@@ -133,6 +132,7 @@ func Set(key interface{}, inst interface{}) {
 }
 
 func SetMap(key interface{}, mapping Map) {
+	reflect.ValueOf(key).Addr()
 	rt := getType(key)
 	container.Store(rt, mapping)
 }
