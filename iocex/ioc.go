@@ -132,7 +132,6 @@ func Set(key interface{}, inst interface{}) {
 }
 
 func SetMap(key interface{}, mapping Map) {
-	reflect.ValueOf(key).Addr()
 	rt := getType(key)
 	container.Store(rt, mapping)
 }
